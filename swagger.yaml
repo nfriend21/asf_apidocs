@@ -47,7 +47,7 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/AuthDestory'
+            $ref: '#/definitions/AuthDestroy'
   '/api/v1/websites/{website_id}/orders':
     get:
       summary: list orders
@@ -144,7 +144,7 @@ paths:
         default:
           description: success
 definitions:
-  AuthDestory:
+  AuthDestroy:
     type: object
     properties:
       deleted:
