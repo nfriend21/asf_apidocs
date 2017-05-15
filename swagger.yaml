@@ -69,12 +69,12 @@ paths:
           type: string
         - name: start_date
           in: query
-          description: Filter orders by date range starting on
+          description: Filter orders by date range starting on YYYYMMDD
           required: false
           type: string
         - name: end_date
           in: query
-          description: Filter orders by date range ending on
+          description: Filter orders by date range ending on YYYYMMDD
           required: false
           type: string
       responses:
