@@ -14,7 +14,7 @@ basePath: /v1
 schemes:
   - https
 paths:
-  /api/v1/authentication_token:
+  '/api/v1/authentication_token':
     post:
       summary: Create authentication token
       produces:
@@ -57,6 +57,16 @@ paths:
           description: Website id
           required: true
           type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
       responses:
         '200':
           description: successful operation
@@ -76,6 +86,16 @@ paths:
           description: Order id
           required: true
           type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
       responses:
         '200':
           description: success
@@ -90,6 +110,16 @@ paths:
           description: Website id
           required: true
           type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
       responses:
         '200':
           description: success
@@ -101,6 +131,16 @@ paths:
         - name: website_id
           in: path
           description: Website id
+          required: true
+          type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
           required: true
           type: string
       responses:
@@ -122,6 +162,16 @@ paths:
           description: order callback id
           required: true
           type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
       responses:
         '200':
           description: success
@@ -138,6 +188,16 @@ paths:
         - name: id
           in: path
           description: order callback id
+          required: true
+          type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
           required: true
           type: string
       responses:
