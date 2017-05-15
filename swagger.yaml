@@ -67,6 +67,16 @@ paths:
           description: Authentication token secret
           required: true
           type: string
+        - name: start_date
+          in: query
+          description: Filter orders by date range starting on
+          required: false
+          type: string
+        - name: end_date
+          in: query
+          description: Filter orders by date range ending on
+          required: false
+          type: string
       responses:
         '200':
           description: successful operation
