@@ -11,6 +11,9 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 host: api.artstorefronts.com
 basePath: /v1
+externalDocs:
+  url: "https://github.com/nfriend21/asf_apidocs/wiki/Art-Storefronts-API"
+  description: "Art Storefronts API wiki (detailed conntection examples)"
 schemes:
   - https
 paths:
@@ -39,6 +42,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/AuthError'
+
     delete:
       summary: Destroy authentication token
       produces:
