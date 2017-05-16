@@ -3,7 +3,7 @@ info:
   description: Art Storefronts API
   version: 1.0.0
   title: Art Storefronts Web API
-  termsOfService: 'http://api.artstorefronts.com/terms/'
+  termsOfService: 'http://www.artstorefronts.com/terms/'
   contact:
     email: apiteam@artstorefronts.com
   license:
