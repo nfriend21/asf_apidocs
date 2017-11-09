@@ -37,11 +37,11 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/AuthToken'
+            $ref: '#/components/schemas/AuthToken'
         '401':
           description: failed
           schema:
-            $ref: '#/definitions/AuthError'
+            $ref: '#/components/schemas/AuthError'
 
     delete:
       summary: Destroy authentication token
@@ -51,8 +51,8 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/AuthDestroy'
-  '/api/v1/websites/{website_id}/orders':
+            $ref: '#/components/schemas/AuthDestroy'
+  '/api/v1/websites/{website_id}/orders.json':
     get:
       summary: list orders
       parameters:
@@ -84,9 +84,47 @@ paths:
       responses:
         '200':
           description: successful operation
+          produces:
+            - 'application/json'
           schema:
-            $ref: '#/definitions/Orders'
-  '/api/v1/websites/{website_id}/orders/{id}':
+            $ref: '#/components/schemas/OrdersJSON'
+  '/api/v1/websites/{website_id}/orders.xml':
+    get:
+      summary: list orders
+      parameters:
+        - name: website_id
+          in: path
+          description: Website id
+          required: true
+          type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
+        - name: start_date
+          in: query
+          description: Filter orders by date range starting on YYYYMMDD
+          required: false
+          type: string
+        - name: end_date
+          in: query
+          description: Filter orders by date range ending on YYYYMMDD
+          required: false
+          type: string
+      produces:
+        - 'application/xml'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/components/schemas/OrdersXML'
+  '/api/v1/websites/{website_id}/orders/{id}.json':
     get:
       summary: get order
       parameters:
@@ -113,8 +151,40 @@ paths:
       responses:
         '200':
           description: success
+          properties:
+            data:
+              $ref: '#/components/schemas/OrderJSON'
+  '/api/v1/websites/{website_id}/orders/{id}.xml':
+    get:
+      summary: get order
+      parameters:
+        - name: website_id
+          in: path
+          description: Website id
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Order id
+          required: true
+          type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
+      produces:
+        - 'application/xml'
+      responses:
+        '200':
+          description: success
           schema:
-            $ref: '#/definitions/Order'
+            $ref: '#/components/schemas/SingleOrderXML'
   '/api/v1/websites/{website_id}/order_callbacks':
     get:
       summary: get order callback
@@ -138,7 +208,7 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/OrderCallbacks'
+            $ref: '#/components/schemas/OrderCallbacks'
     post:
       summary: create order callback
       parameters:
@@ -161,7 +231,7 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/OrderCallback'
+            $ref: '#/components/schemas/OrderCallback'
   '/api/v1/websites/{website_id}/order_callbacks/{id}':
     put:
       summary: update order callback
@@ -190,7 +260,7 @@ paths:
         '200':
           description: success
           schema:
-            $ref: '#/definitions/OrderCallback'
+            $ref: '#/components/schemas/OrderCallback'
     delete:
       summary: destroy order callback
       parameters:
@@ -217,310 +287,565 @@ paths:
       responses:
         default:
           description: success
-definitions:
-  AuthDestroy:
-    type: object
-    properties:
-      deleted:
-        type: boolean
-      username:
-        type: string
-  AuthError:
-    type: object
-    properties:
-      errors:
-        type: array
-        items:
+components:
+  schemas:
+    OrderJSON:
+      type: object
+      properties:
+        attributes:
+          type: object
+          properties:
+            order_header:
+              $ref: '#/components/schemas/OrderHeaderJSON'
+            order_items:
+              type: array
+              items:
+                $ref: '#/components/schemas/OrderItem'
+            id:
+              type: integer
+            type:
+              type: string
+    SingleOrderXML:
+      type: object
+      xml:
+        name: 'LLXML'
+      properties:
+        id:
           type: string
-  AuthToken:
-    type: object
-    properties:
-      secret:
-        type: string
-      secret_id:
-        type: string
-      username:
-        type: string
-  Orders:
-    type: object
-    properties:
-      orders:
-        type: array
-        items:
-          $ref: '#/definitions/Order'
-      start_date:
-        type: string
-      end_date:
-        type: string
-  Order:
-    type: object
-    properties:
-      id:
-        type: integer
-      became_official_at:
-        type: string
-      billing_address_id:
-        type: integer
-      cart_id:
-        type: integer
-      charged_with_stripe_account_id:
-        type: integer
-      checkout_page:
-        type: string
-      checkout_source:
-        type: string
-      contact_id:
-        type: integer
-      coupon_id:
-        type: integer
-      created_at:
-        type: string
-      deleted_at:
-        type: string
-      discount_total:
-        type: string
-      download_zip_created_at:
-        type: string
-      download_zip_url:
-        type: string
-      fees_outstanding:
-        type: boolean
-      fulfillment_order_id:
-        type: integer
-      fulfillment_order_website_id:
-        type: integer
-      handling_total:
-        type: string
-      internal_memo:
-        type: string
-      is_transaction_fee_free_purchase_from_website_owner:
-        type: boolean
-      markup_percentage:
-        type: string
-      merchant_response:
-        type: string
-      message:
-        type: string
-      number:
-        type: integer
-      order_status:
-        type: string
-      parent_number:
-        type: string
-      payment_method:
-        type: string
-      payment_profile_id:
-        type: integer
-      payment_status:
-        type: string
-      paypal_response:
-        type: object
-        $ref: '#/definitions/PaypalResponse'
-      paypal_response_items:
-        type: array
-        items:
-          $ref: '#/definitions/PaypalResponseItem'
-      revenue_split_rate:
-        type: string
-      shipping_address_id:
-        type: integer
-      shipping_method_id:
-        type: integer
-      shipping_provider:
-        type: string
-      shipping_status:
-        type: string
-      shipping_total:
-        type: string
-      store_id:
-        type: integer
-      tax_exempt:
-        type: boolean
-      tax_method_id:
-        type: integer
-      tax_total:
-        type: string
-      total:
-        type: string
-      total_before_shipping_handling_tax:
-        type: string
-      tracking_no:
-        type: string
-      transaction_fee_data:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: integer
-      we_fulfill:
-        type: boolean
-      website_id:
-        type: integer
-  OrderCallbacks:
-    type: object
-    properties:
-      order_callbacks:
-        type: array
-        items:
-          $ref: '#/definitions/OrderCallback'
-  OrderCallback:
-    type: object
-    properties:
-      id:
-        type: integer
-      website_id:
-        type: integer
-      url:
-        type: string
-  PaypalResponse:
-    type: object
-    properties:
-      mc_gross:
-        type: string
-      protection_eligibility:
-        type: string
-      address_status:
-        type: string
-      item_number1:
-        type: string
-      tax:
-        type: string
-      payer_id:
-        type: string
-      address_street:
-        type: string
-      payment_date:
-        type: string
-      option_name2_1:
-        type: string
-      option_selection1_1:
-        type: string
-      payment_status:
-        type: string
-      option_name4_1:
-        type: string
-      option_selection3_1:
-        type: string
-      charset:
-        type: string
-      option_name6_1:
-        type: string
-      address_zip:
-        type: string
-      mc_shipping:
-        type: string
-      option_selection5_1:
-        type: string
-      mc_handling:
-        type: string
-      first_name:
-        type: string
-      mc_fee:
-        type: string
-      address_country_code:
-        type: string
-      address_name:
-        type: string
-      notify_version:
-        type: string
-      custom:
-        type: string
-      payer_status:
-        type: string
-      business:
-        type: string
-      address_country:
-        type: string
-      num_cart_items:
-        type: string
-      mc_handling1:
-        type: string
-      address_city:
-        type: string
-      verify_sign:
-        type: string
-      payer_email:
-        type: string
-      mc_shipping1:
-        type: string
-      tax1:
-        type: string
-      option_name1_1:
-        type: string
-      option_name3_1:
-        type: string
-      txn_id:
-        type: string
-      option_selection2_1:
-        type: string
-      last_name:
-        type: string
-      address_state:
-        type: string
-      item_name1:
-        type: string
-      receiver_email:
-        type: string
-      payment_fee:
-        type: string
-      option_name5_1:
-        type: string
-      option_selection4_1:
-        type: string
-      quantity1:
-        type: string
-      receiver_id:
-        type: string
-      txn_type:
-        type: string
-      option_selection6_1:
-        type: string
-      mc_gross_1:
-        type: string
-      mc_currency:
-        type: string
-      residence_country:
-        type: string
-      receipt_id:
-        type: string
-      transaction_subject:
-        type: string
-      payment_gross:
-        type: string
-      ipn_track_id:
-        type: string
-      action:
-        type: string
-      controller:
-        type: string
-  PaypalResponseItem:
-    type: object
-    properties:
-      id:
-        type: integer
-      item_name:
-        type: string
-      quantity:
-        type: integer
-      size:
-        type: string
-      medium:
-        type: string
-      option:
-        type: string
-      style_color:
-        type: string
-      style_finishing:
-        type: string
-      frame:
-        type: string
-      subtotal:
-        type: string
-      tax:
-        type: string
-      handling:
-        type: string
-      shipping:
-        type: string
-      total:
-        type: string
+          example: "Lab Order"
+          xml:
+            attribute: true
+        Creator:
+          type: string
+          example: "Art Storefronts"
+        Version:
+          type: string
+          example: "ASF 2.12"
+        Order:
+          $ref: '#/components/schemas/OrderXML'
+    OrderXML:
+      type: object
+      xml:
+        name: 'Order'
+      properties:
+        OrderID:
+          type: string
+        OrderHeader:
+          $ref: '#/components/schemas/OrderHeaderXML'
+        OrderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemXML'
+
+    AuthDestroy:
+      type: object
+      properties:
+        deleted:
+          type: boolean
+        username:
+          type: string
+    AuthError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    AuthToken:
+      type: object
+      properties:
+        secret:
+          type: string
+        secret_id:
+          type: string
+        username:
+          type: string
+    OrdersXML:
+      type: object
+      xml:
+        name: 'LLXML'
+      properties:
+        id:
+          type: string
+          example: "Lab Order"
+          xml:
+            attribute: true
+        Creator:
+          type: string
+          example: "Art Storefronts"
+        Version:
+          type: string
+          example: "ASF 2.12"
+        Orders:
+          type: object
+          properties:
+            Order:
+              $ref: '#/components/schemas/OrderXML'
+    OrdersJSON:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderJSON'
+        meta:
+          type: object
+          properties:
+            start_date:
+              type: string
+            end_date:
+              type: string
+            total:
+              type: string
+    OrderHeaderXML:
+      type: object
+      properties:
+        OrderTimeStamp:
+          type: string
+          format: date
+        OrderDate:
+          type: string
+          format: date
+        OrderLastUpdatedAt:
+          type: string
+          format: date
+        OrderTotal:
+          type: number
+        OrderTaxable:
+          type: string
+          example: "No"
+        OrderNotes:
+          type: string
+        OrderReference:
+          type: integer
+        OrderFor:
+          type: string
+        OrderChargeNum:
+          type: string
+        OrderPromoCode:
+          type: string
+        OrderStatus:
+          type: string
+        OrderShippingStatus:
+          type: string
+        OrderPaymentStatus:
+          type: string
+        OrderInternalMemo:
+          type: string
+        OrderMessage:
+          type: string
+        OrderAssetDownloadURL:
+          type: string
+        WebsiteName:
+          type: string
+        WebsiteId:
+          type: integer
+        Customer:
+          type: object
+          properties:
+            CustomerID:
+              type: integer
+            AccountName:
+              type: string
+            Phone1:
+              type: string
+            Email:
+              type: string
+        Billing:
+          type: object
+          properties:
+            Address1:
+              type: string
+            Address2:
+              type: string
+            City:
+              type: string
+            State:
+              type: string
+            PostalCode:
+              type: string
+            Country:
+              type: string
+        Shipping:
+          type: object
+          properties:
+            DropShip:
+              type: boolean
+            CustomerName:
+              type: string
+            Address1:
+              type: string
+            Address2:
+              type: string
+            City:
+              type: string
+            State:
+              type: string
+            PostalCode:
+              type: string
+            Country:
+              type: string
+            Phone1:
+              type: string
+            ShippingMethod:
+              type: string
+            ShippingPrice:
+              type: number
+            ShipperNumber:
+              type: string
+        Payment:
+          type: object
+          properties:
+            EncryptionType:
+              type: string
+            CardNum:
+              type: string
+            CardExp:
+              type: string
+            CardCCID:
+              type: string
+            CardConfirmation:
+              type: string
+            EncryptionToken:
+              type: string
+            PaymentType:
+              type: string
+            PaymentNote:
+              type: string
+            CardType:
+              type: string
+            CardName:
+              type: string
+            CardTel:
+              type: string
+            CardAmt:
+              type: string
+    OrderHeaderJSON:
+      type: object
+      properties:
+        assets_download_url:
+          type: string
+        billing:
+          type: object
+          properties:
+            address1:
+              type: string
+            address2:
+              type: string
+            city:
+              type: string
+            country:
+              type: string
+            postal_code:
+              type: string
+            state:
+              type: string
+        customer:
+          type: object
+          properties:
+            account_name:
+              type: string
+            email:
+              type: string
+            phone:
+              type: string
+        date:
+          type: string
+        internal_memo:
+          type: string
+        last_updated_at:
+          type: string
+        message:
+          type: string
+        payment:
+          type: object
+          properties:
+            card_amt:
+              type: string
+            payment_note:
+              type: string
+            payment_type:
+              type: string
+        payment_status:
+          type: string
+        promo_code:
+          type: string
+        reference:
+          type: integer
+        shipping:
+          type: object
+          properties:
+            address1:
+              type: string
+            address2:
+              type: string
+            city:
+              type: string
+            country:
+              type: string
+            customer_name:
+              type: string
+            phone1:
+              type: string
+            postal_code:
+              type: string
+            shipping_method:
+              type: string
+            shipping_price:
+              type: number
+            state:
+              type: string
+        shipping_status:
+          type: string
+        status:
+          type: string
+        taxable:
+          type: boolean
+        total:
+          type: number
+        website_id:
+          type: integer
+        website_name:
+          type: string
+    OrderItemXML:
+      type: object
+      properties:
+        OrderItemInfo:
+          type: object
+          properties:
+            OISequence:
+              type: string
+            ItemCode:
+              type: integer
+            ServiceType:
+              type: string
+            Description:
+              type: string
+            FDescription:
+              type: string
+            ItemOptions:
+              type: object
+              properties:
+                Medium:
+                  type: string
+                Size:
+                  type: string
+                MediumOption:
+                  type: string
+                Color:
+                  type: string
+                StyleFinish:
+                  type: string
+                Comments:
+                  type: string
+            FPrice:
+              type: number
+            WSPrice:
+              type: number
+            Qty:
+              type: integer
+            Each:
+              type: integer
+            ProductName:
+              type: string
+            ProductID:
+              type: integer
+            StorePageName:
+              type: string
+            StoreID:
+              type: integer
+            Artist:
+              type: string
+    OrderItem:
+      type: object
+      properties:
+        artist:
+          type: string
+        each:
+          type: integer
+        f_description:
+          type: string
+        f_price:
+          type: number
+        item_code:
+          type: string
+        oi_sequence:
+          type: integer
+        product_id:
+          type: integer
+        product_name:
+          type: string
+        qty:
+          type: integer
+        store_id:
+          type: integer
+        store_page_name:
+          type: string
+    OrderCallbacks:
+      type: object
+      properties:
+        order_callbacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderCallback'
+    OrderCallback:
+      type: object
+      properties:
+        id:
+          type: integer
+        website_id:
+          type: integer
+        url:
+          type: string
+    PaypalResponse:
+      type: object
+      properties:
+        mc_gross:
+          type: string
+        protection_eligibility:
+          type: string
+        address_status:
+          type: string
+        item_number1:
+          type: string
+        tax:
+          type: string
+        payer_id:
+          type: string
+        address_street:
+          type: string
+        payment_date:
+          type: string
+        option_name2_1:
+          type: string
+        option_selection1_1:
+          type: string
+        payment_status:
+          type: string
+        option_name4_1:
+          type: string
+        option_selection3_1:
+          type: string
+        charset:
+          type: string
+        option_name6_1:
+          type: string
+        address_zip:
+          type: string
+        mc_shipping:
+          type: string
+        option_selection5_1:
+          type: string
+        mc_handling:
+          type: string
+        first_name:
+          type: string
+        mc_fee:
+          type: string
+        address_country_code:
+          type: string
+        address_name:
+          type: string
+        notify_version:
+          type: string
+        custom:
+          type: string
+        payer_status:
+          type: string
+        business:
+          type: string
+        address_country:
+          type: string
+        num_cart_items:
+          type: string
+        mc_handling1:
+          type: string
+        address_city:
+          type: string
+        verify_sign:
+          type: string
+        payer_email:
+          type: string
+        mc_shipping1:
+          type: string
+        tax1:
+          type: string
+        option_name1_1:
+          type: string
+        option_name3_1:
+          type: string
+        txn_id:
+          type: string
+        option_selection2_1:
+          type: string
+        last_name:
+          type: string
+        address_state:
+          type: string
+        item_name1:
+          type: string
+        receiver_email:
+          type: string
+        payment_fee:
+          type: string
+        option_name5_1:
+          type: string
+        option_selection4_1:
+          type: string
+        quantity1:
+          type: string
+        receiver_id:
+          type: string
+        txn_type:
+          type: string
+        option_selection6_1:
+          type: string
+        mc_gross_1:
+          type: string
+        mc_currency:
+          type: string
+        residence_country:
+          type: string
+        receipt_id:
+          type: string
+        transaction_subject:
+          type: string
+        payment_gross:
+          type: string
+        ipn_track_id:
+          type: string
+        action:
+          type: string
+        controller:
+          type: string
+    PaypalResponseItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        item_name:
+          type: string
+        quantity:
+          type: integer
+        size:
+          type: string
+        medium:
+          type: string
+        option:
+          type: string
+        style_color:
+          type: string
+        style_finishing:
+          type: string
+        frame:
+          type: string
+        subtotal:
+          type: string
+        tax:
+          type: string
+        handling:
+          type: string
+        shipping:
+          type: string
+        total:
+          type: string
