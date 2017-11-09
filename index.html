@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Art Storefronts Web API Doc</title>
+  <title>Swagger UI</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
   <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
@@ -11,15 +11,15 @@
   <style>
     html
     {
-        box-sizing: border-box;
-        overflow: -moz-scrollbars-vertical;
-        overflow-y: scroll;
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
     }
     *,
     *:before,
     *:after
     {
-        box-sizing: inherit;
+      box-sizing: inherit;
     }
 
     body {
@@ -71,10 +71,12 @@
 <script src="./swagger-ui-standalone-preset.js"> </script>
 <script>
 window.onload = function() {
+  
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "http://apidocs.artstorefronts.com/swagger.yaml",
-    dom_id: "#swagger-ui",
+    url: "http://localhost:8080/swagger.yaml",
+    dom_id: '#swagger-ui',
+    deepLinking: true,
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset
@@ -84,6 +86,7 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout"
   })
+
   window.ui = ui
 }
 </script>
