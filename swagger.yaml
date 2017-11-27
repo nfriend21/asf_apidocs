@@ -55,6 +55,9 @@ paths:
   '/api/v1/websites/{website_id}/orders.json':
     get:
       summary: list orders
+      description: >
+        This resource returns detailed order information in JSON format.
+        NOTE that the Authorization token MUST be created by the website/gallery owner.
       parameters:
         - name: website_id
           in: path
@@ -91,6 +94,9 @@ paths:
   '/api/v1/websites/{website_id}/orders.xml':
     get:
       summary: list orders
+      description: >
+        This resource returns detailed order information in XML format.
+        NOTE that the Authorization token MUST be created by the website/gallery owner.
       parameters:
         - name: website_id
           in: path
