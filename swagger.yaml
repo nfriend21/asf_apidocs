@@ -420,6 +420,14 @@ components:
         OrderTaxable:
           type: string
           example: "No"
+        OrderTaxTotal:
+          type: number
+        OrderTaxMethod_id:
+          type: integer
+        OrderCouponName:
+          type: string
+        OrderCouponId:
+          type: integer
         OrderNotes:
           type: string
         OrderReference:
@@ -607,6 +615,16 @@ components:
           type: string
         taxable:
           type: boolean
+        order_tax_total:
+          type: number
+        order_tax_method_id:
+          type: integer
+        order_discount_total:
+          type: number
+        order_coupon_name:
+          type: string
+        order_coupon_id:
+          type: integer
         total:
           type: number
         website_id:
