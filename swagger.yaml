@@ -13,7 +13,7 @@ host: api.artstorefronts.com
 basePath: /v1
 externalDocs:
   url: "https://github.com/nfriend21/asf_apidocs/wiki/Art-Storefronts-API"
-  description: "Art Storefronts API wiki (detailed conntection examples)"
+  description: "Art Storefronts API wiki (detailed connection examples)"
 schemes:
   - https
 paths:
@@ -191,6 +191,89 @@ paths:
           description: success
           schema:
             $ref: '#/components/schemas/SingleOrderXML'
+  '/api/v1/websites/{website_id}/orders/{id}':
+    put:
+      summary: update order
+      parameters:
+        - name: website_id
+          in: path
+          description: Website id
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Order id
+          required: true
+          type: string
+        - name: secret_id
+          in: query
+          description: Authentication token secret_id
+          required: true
+          type: string
+        - name: secret
+          in: query
+          description: Authentication token secret
+          required: true
+          type: string
+        - in: body
+          name: order
+          required: true
+          schema:
+            properties:
+              internal_memo:
+                type: string
+                example: 'It should be sent after next friday'
+              order_status:
+                type: string
+                enum: ['Order Received', 'In Process', 'Printed', 'Finishing', 'Completed - Export to File', 'Completed', 'On Hold', 'Awaiting Client Response', 'Awaiting Stock', 'In Dispute', 'Canceled', 'Paypal Pending']
+                example: 'In Process'
+              payment_status:
+                type: string
+                enum: ['Unpaid', 'Paid', 'Refunded']
+                example: 'Paid'
+              shipping_provider:
+                type: string
+                exmaple: 'DHL'
+              shipping_status:
+                type: string
+                enum: ['Not Shipped', 'Processing', 'Packed', 'Shipped', 'Ready for Pickup', 'Picked Up', 'Not Applicable']
+                example: 'Processing'
+              tracking_no:
+                type: string
+                example: '123123123123'
+      responses:
+        '200':
+          description: successful operation
+          produces:
+            - 'application/json'
+          schema:
+            $ref: '#/components/schemas/OrdersJSON'
+        '404':
+          description: required path attributes are missing
+          produces:
+            - 'application/json'
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "order with id 0 does not exist for the website"
+        '422':
+          description: order cannot be updated because of the wrong attributes
+          produces:
+            - 'application/json'
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  order_status:
+                    type: array
+                    example: ['"error1" is not a valid order status']
+                  payment_status:
+                    type: array
+                    example: ['"error2" is not a valid payment status']
   '/api/v1/websites/{website_id}/order_callbacks':
     get:
       summary: get order callback
