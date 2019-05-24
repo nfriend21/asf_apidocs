@@ -227,20 +227,24 @@ paths:
                 type: string
                 enum: ['Order Received', 'In Process', 'Printed', 'Finishing', 'Completed - Export to File', 'Completed', 'On Hold', 'Awaiting Client Response', 'Awaiting Stock', 'In Dispute', 'Canceled', 'Paypal Pending']
                 example: 'In Process'
-              payment_status:
-                type: string
-                enum: ['Unpaid', 'Paid', 'Refunded']
-                example: 'Paid'
-              shipping_provider:
-                type: string
-                exmaple: 'DHL'
               shipping_status:
                 type: string
                 enum: ['Not Shipped', 'Processing', 'Packed', 'Shipped', 'Ready for Pickup', 'Picked Up', 'Not Applicable']
                 example: 'Processing'
-              tracking_no:
+        - in: body
+          name: order_history
+          required: true
+          schema:
+            properties:
+              body:
                 type: string
-                example: '123123123123'
+                example: 'Here is a note about the order'
+              email_status:
+                type: boolean
+                example: true
+              email_note:
+                type: boolean
+                exmaple: false
       responses:
         '200':
           description: successful operation
@@ -271,9 +275,9 @@ paths:
                   order_status:
                     type: array
                     example: ['"error1" is not a valid order status']
-                  payment_status:
+                  shipping_status:
                     type: array
-                    example: ['"error2" is not a valid payment status']
+                    example: ['"error2" is not a valid shipping status']
   '/api/v1/websites/{website_id}/order_callbacks':
     get:
       summary: get order callback
