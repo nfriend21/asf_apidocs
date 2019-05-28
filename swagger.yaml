@@ -225,7 +225,8 @@ paths:
                 example: 'It should be sent after next friday'
               order_status:
                 type: string
-                enum: ['Order Received', 'In Process', 'Printed', 'Finishing', 'Completed - Export to File', 'Completed', 'On Hold', 'Awaiting Client Response', 'Awaiting Stock', 'In Dispute', 'Canceled', 'Paypal Pending']
+                enum: ['Order Received', 'In Process', 'Printed', 'Finishing', 'Completed - Export to File', 'Completed', 'On Hold',
+                 'Awaiting Client Response', 'Awaiting Stock', 'In Dispute', 'Canceled', 'Paypal Pending']
                 example: 'In Process'
               shipping_status:
                 type: string
@@ -234,17 +235,27 @@ paths:
         - in: body
           name: order_history
           required: true
+          description: 'order_history will update the history on the order, which will allow the customer to see a timestamped
+            record of changes to the order.  when updating an order via the api, this should always be included.'
           schema:
             properties:
               body:
                 type: string
                 example: 'Here is a note about the order'
+                description: '“body” is where you can inform the customer with any text you prefer.  This field is also
+                  where you should input the link to track the order.  For example:  “Your order has shipped! You can
+                  track it here - http://www.fedex.com/Tracking?action=track&tracknumbers=492209495110 .
+                  Your tracking number is 492209495110”.  Our software will automatically convert any link into an actual HTML link.'
               email_status:
                 type: boolean
                 example: true
+                description: '“email_status” means an email will be sent to the customer containing all of the order details,
+                 including the “order_status” and the “shipping_status”.  It will not include the “body”.'
               email_note:
                 type: boolean
                 exmaple: false
+                description: '“email_note” means an email will be sent to the customer containing all of the order details,
+                  including the “body”.'
       responses:
         '200':
           description: successful operation
